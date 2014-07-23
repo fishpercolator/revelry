@@ -1,0 +1,21 @@
+{
+  "name": "Reverend",
+  "version": "0.1.0",
+  "description": "Project builder for Reveal.js",
+  "main": "reverend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pedantic-git/reverend.git"
+  },
+  "author": "Rich Daley",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/pedantic-git/reverend/issues"
+  },
+  "dependencies": {
+    "nomnom": "1.8.x"
+  }
+}
