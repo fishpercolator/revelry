@@ -18,15 +18,14 @@ exports.new = function (opts) {
 
 // The 'build' command builds the HTML for a Reverend presentation
 exports.build = function (opts) {
-  var proj = process.cwd();
-  var revfile = proj+'/Revfile.json';
+  var revfile = 'Revfile.json';
   if (!fs.existsSync(revfile)) throw "Not a Reverend project dir!";
 
-  var target = (opts.target || proj+'/www').replace(/\/?$/, '/');
+  var target = (opts.target || 'www').replace(/\/?$/, '/');
   if (!fs.existsSync(target)) fs.mkdirSync(target);
 
   var Handlebars = require('handlebars');
-  var data     = fs.readFileSync('../templates/base.html');
+  var data     = fs.readFileSync(__dirname+'/../templates/base.html');
   var context  = JSON.parse(fs.readFileSync(revfile));
   var template = Handlebars.compile(data.toString('utf8'));
   var html     = template(context);

@@ -1,8 +1,11 @@
 {
-  "name": "Reverend",
+  "name": "reverend",
   "version": "0.1.0",
   "description": "Project builder for Reveal.js",
   "main": "reverend.js",
+  "bin": {
+    "reverend": "reverend.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
