@@ -16,6 +16,7 @@
     "url": "https://github.com/pedantic-git/reverend/issues"
   },
   "dependencies": {
-    "nomnom": "1.8.x"
+    "nomnom": "1.8.x",
+    "handlebars": "2.0.x"
   }
 }

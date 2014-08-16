@@ -24,4 +24,16 @@ parser.command('new')
   })
   .callback(commands.new);
 
+parser.command('build')
+  .help('Build the current Reverend project')
+  .options({
+    target: {
+      position: 1,
+      metavar: '<target>',
+      help: 'The target directory to build into',
+      required: false
+    }
+  })
+  .callback(commands.build);
+
 parser.parse();
