@@ -41,7 +41,7 @@ The anatomy of a Revelry project
 
 **slides.html** is a [Handlebars](http://handlebarsjs.com/)-enabled
   HTML file containing your slides. Each slide is given an HTML
-  <section>.
+  &lt;section&gt;.
 
 **img** is a folder where you can put images you need for your
   presentation. Its contents will be copied to the web page when your
