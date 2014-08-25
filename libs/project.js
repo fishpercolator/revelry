@@ -1,4 +1,5 @@
 var fs = require('fs');
+var Handlebars = require('handlebars');
 var util = require('../libs/util.js');
 
 // Constructor for project
@@ -15,7 +16,19 @@ Project.prototype = {
   // Create a new project in this.dir with the specified config
   create: function (config) {
     this.createDir('', true);
+
+    // Create the Revfile and slides.html template using the config
     this.writeFileJSON('Revfile.json', config);
+    var slides = this.template('slides', true);
+    this.writeFile('slides.html', slides);
+
+    // Create a .gitignore file and some stubs
+    this.writeFile('.gitignore', "www/\n");
+    this.createDir('img');
+    this.createDir('custom');
+    this.writeFile('custom/custom.css');
+    this.writeFile('custom/header.html');
+
   },
 
   // Build the project in this.dir into a www page in this.target
@@ -25,6 +38,10 @@ Project.prototype = {
 
     // Create the target layout
     this.createTDir('');
+
+    // Register partials that will be interpolated into the base
+    // template
+    Handlebars.registerPartial('slides', this.readFile('slides.html'));
 
     // Compile the index template
     var template = this.template('base');
@@ -39,10 +56,11 @@ Project.prototype = {
   },
 
   // Get a template in Handlebars format
-  template: function (name) {
-    var Handlebars = require('handlebars');
-    var contents   = fs.readFileSync(__dirname+'/../templates/'+name+'.html');
-    return Handlebars.compile(contents.toString('utf8'));
+  template: function (name, contents_only) {
+    var contents   = fs.readFileSync(__dirname+'/../templates/'+name+'.html').
+      toString('utf8');
+    if (contents_only) return contents;
+    return Handlebars.compile(contents);
   },
 
   // Utility functions for manipulating files in Revelry projects
@@ -78,8 +96,12 @@ Project.prototype = {
     var fn = root+name;
     console.log(fn);
     return fs.writeFileSync(fn, (string||''));
+  },
+  readFile: function (name) {
+    var fn = this.dir+name;
+    var contents = fs.readFileSync(fn);
+    return contents.toString('utf8');
   }
-
 };
 
 module.exports = Project;
