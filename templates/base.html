@@ -1,12 +1,43 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta charset="utf-8">
   <title>{{title}}</title>
   <meta name="description">{{description}}</meta>
+  <meta name="author">{{author}}</meta>
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/{{theme}}.css" id="theme">
+
+  {{!# include zenburn and print stylesheets conditionally}}
+
+  <!--[if lt IE 9]>
+  <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->
+
 </head>
 <body>
+  <div class="reveal">
+    <div class="slides">
 
 {{> slides}}
 
+    </div>
+  </div>
+
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.min.js"></script>
+
+  <script>
+    {{!# FIXME: Set options here}}
+    Reveal.initialize({
+      theme: "{{theme}}"
+    });
+  </script>
 </body>
 </html>

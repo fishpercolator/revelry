@@ -1,13 +1,17 @@
-var fs = require('fs');
+var fs = require('fs-extra');
+var path = require('path');
 var Handlebars = require('handlebars');
-var util = require('../libs/util.js');
+var Config = require('../libs/config.js');
 
 // Constructor for project
 function Project (theDir, theTarget) {
   // dir is the project dir
-  this.dir = util.canonicalize(theDir || '.');
+  this.dir = path.normalize(theDir || '.');
   // target is the dir we build to (defaults to this.dir/www)
-  this.target = util.canonicalize(theTarget || this.dir+'www');
+  this.target = path.normalize(theTarget || path.join(this.dir,'www'));
+
+  // Find the path to reveal.js
+  this.reveal_dir = path.normalize(require.resolve('reveal.js/js/reveal.js')+'/../..');
 }
 
 Project.prototype = {
@@ -46,13 +50,20 @@ Project.prototype = {
     // Compile the index template
     var template = this.template('base');
     this.writeTFile('index.html', template(config));
+
+    // Copy relevant files from Reveal.js
+    this.copyFromReveal('css', 'reveal.css');
+    this.copyFromReveal('css/theme', config.theme+'.css');
+    this.copyFromReveal('lib/js', 'html5shiv.js');
+    this.copyFromReveal('lib/js', 'head.min.js');
+    this.copyFromReveal('js', 'reveal.min.js')
   },
 
   // Get the config from the current Revfile
   config: function () {
-    var revfile = this.dir+'Revfile.json';
+    var revfile = path.join(this.dir,'Revfile.json');
     if (!fs.existsSync(revfile)) throw "Not a Revelry project dir!";
-    return JSON.parse(fs.readFileSync(revfile));
+    return new Config(JSON.parse(fs.readFileSync(revfile)));
   },
 
   // Get a template in Handlebars format
@@ -71,17 +82,11 @@ Project.prototype = {
     return this._createDir(this.target, name, mustnt_exist);
   },
   _createDir: function (root, name, mustnt_exist) {
-    var dn = root+name;
-    if (fs.existsSync(dn)) {
-      if (mustnt_exist) {
-	throw "Directory already exists: "+dn;
-      }
-      else {
-	return;
-      }
-    }
+    var dn = path.join(root,name);
+    if (mustnt_exist && fs.existsSync(dn))
+      throw "Directory already exists: "+dn;
     console.log(dn);
-    return fs.mkdirSync(dn);
+    return fs.mkdirsSync(dn);
   },
   writeFile: function (name, string) {
     return this._writeFile(this.dir, name, string);
@@ -93,14 +98,24 @@ Project.prototype = {
     return this._writeFile(this.target, name, string);
   },
   _writeFile: function (root, name, string) {
-    var fn = root+name;
+    var fn = path.join(root,name);
     console.log(fn);
     return fs.writeFileSync(fn, (string||''));
   },
   readFile: function (name) {
-    var fn = this.dir+name;
+    var fn = path.join(this.dir,name);
     var contents = fs.readFileSync(fn);
     return contents.toString('utf8');
+  },
+  copyFromReveal: function (dir, name) {
+    var fn = path.join(this.reveal_dir, dir, name);
+    var target_dir = path.join(this.target, dir);
+    fs.ensureDirSync(target_dir);
+    var target_fn = path.join(target_dir, name);
+    if (!fs.existsSync(target_fn)) {
+      console.log(target_fn);
+      return fs.copySync(fn, target_fn);
+    }
   }
 };
 

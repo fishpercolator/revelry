@@ -1,14 +1,15 @@
 var fs = require('fs');
 var Project = require('../libs/project.js');
+var Config  = require('../libs/config.js');
 
 // The 'new' command creates a new Revelry project
 exports.new = function (opts) {
   var dir = './'+opts.name;
 
-  var config = {
+  var config = new Config({
     title: opts.title || opts.name,
     description: opts.description || ""
-  };
+  });
 
   var p = new Project(dir);
   p.create(config);
