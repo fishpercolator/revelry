@@ -9,6 +9,9 @@ unnecessarily duplicating huge chunks of boilerplate. With Revelry
 you can concentrate on your presentation content and let Revelry take
 care of the rest.
 
+**NOTE**: This is a pre-alpha release. It doesn't do everything below
+  just yet, but it will do soon!
+
 Installing
 ----------
 
