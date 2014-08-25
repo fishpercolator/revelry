@@ -1,5 +1,5 @@
-Revely
-========
+Revelry
+=======
 
 Revelry is a project builder for
 [Reveal.js](http://lab.hakim.se/reveal-js/).
