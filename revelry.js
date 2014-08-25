@@ -5,7 +5,7 @@ var commands = require('./libs/commands.js');
 var parser = require('nomnom');
 
 parser.command('new')
-  .help('Create a new Reverend project')
+  .help('Create a new Revelry project')
   .options({
     name: {
       position: 1,
@@ -25,7 +25,7 @@ parser.command('new')
   .callback(commands.new);
 
 parser.command('build')
-  .help('Build the current Reverend project')
+  .help('Build the current Revelry project')
   .options({
     target: {
       position: 1,

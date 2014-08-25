@@ -17,9 +17,9 @@ Installing
 Creating a project
 ------------------
 
-    $ reverend new myproject
+    $ revelry new myproject
 
-    $ reverend new myproject -t "My amazing presentation" -d "A short description of my presentation"
+    $ revelry new myproject -t "My amazing presentation" -d "A short description of my presentation"
 
 The anatomy of a Revelry project
 ---------------------------------

@@ -1,22 +1,22 @@
 {
-  "name": "reverend",
+  "name": "revelry",
   "version": "0.1.0",
   "description": "Project builder for Reveal.js",
-  "main": "reverend.js",
+  "main": "revelry.js",
   "bin": {
-    "reverend": "reverend.js"
+    "revelry": "revelry.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/pedantic-git/reverend.git"
+    "url": "git://github.com/pedantic-git/revelry.git"
   },
   "author": "Rich Daley",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/pedantic-git/reverend/issues"
+    "url": "https://github.com/pedantic-git/revelry/issues"
   },
   "dependencies": {
     "nomnom": "1.8.x",
