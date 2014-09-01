@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var fs = require('fs-extra');
 var path = require('path');
 var Handlebars = require('handlebars');
@@ -53,6 +54,14 @@ Project.prototype = {
     Handlebars.registerHelper('json', function (config) {
       return new Handlebars.SafeString(JSON.stringify(config));
     });
+    Handlebars.registerHelper('ifplugin', function (name, options) {
+      if (this.has_plugin(name)) {
+	return new Handlebars.SafeString(options.fn(this));
+      }
+    });
+
+    // Dynamically create some config
+    config.options.dependencies = config.get_dependencies();
 
     // Compile the index template
     var template = this.template('base');
@@ -63,15 +72,23 @@ Project.prototype = {
     this.copyFile('custom/custom.css', 'css/custom.css');
 
     // Copy relevant files from Reveal.js
-    this.copyFromReveal('css', 'reveal.css');
-    this.copyFromReveal('css/theme', config.options.theme+'.css');
-    this.copyFromReveal('lib/js', 'html5shiv.js');
-    this.copyFromReveal('lib/js', 'head.min.js');
-    var exts = ['eot', 'svg', 'ttf', 'woff'];
-    for (i in exts) {
-      this.copyFromReveal('lib/font', 'league_gothic-webfont.'+exts[i]);
+    this.copyFromReveal('css/reveal.css');
+    this.copyFromReveal('css/print/pdf.css');
+    this.copyFromReveal('css/print/paper.css');
+    this.copyFromReveal('css/theme/'+config.options.theme+'.css');
+    if (config.has_plugin('highlight')) {
+      this.copyFromReveal('lib/css/zenburn.css');
     }
-    this.copyFromReveal('js', 'reveal.min.js');
+    this.copyFromReveal('lib/js/html5shiv.js');
+    this.copyFromReveal('lib/js/head.min.js');
+    var this_ = this;
+    _.each(['eot', 'svg', 'ttf', 'woff'], function (ext) {
+      this_.copyFromReveal('lib/font/league_gothic-webfont.'+ext);
+    });
+    this.copyFromReveal('js/reveal.min.js');
+    _.each(config.get_files_for_dependencies(), function (fn) {
+      this_.copyFromReveal(fn);
+    });
   },
 
   // Rewrite the Revfile.json with any new values loaded from the
@@ -132,11 +149,10 @@ Project.prototype = {
     var contents = fs.readFileSync(fn);
     return contents.toString('utf8');
   },
-  copyFromReveal: function (dir, name) {
-    var fn = path.join(this.reveal_dir, dir, name);
-    var target_dir = path.join(this.target, dir);
-    fs.ensureDirSync(target_dir);
-    var target_fn = path.join(target_dir, name);
+  copyFromReveal: function (name) {
+    var fn = path.join(this.reveal_dir, name);
+    var target_fn = path.join(this.target, name);
+    fs.ensureDirSync(path.dirname(target_fn));
     if (!fs.existsSync(target_fn)) {
       console.log(target_fn);
       return fs.copySync(fn, target_fn);

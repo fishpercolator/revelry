@@ -14,8 +14,18 @@
   <link rel="stylesheet" href="css/reveal.css">
   <link rel="stylesheet" href="css/theme/{{options.theme}}.css" id="theme">
   <link rel="stylesheet" href="css/custom.css">
-
-  {{!# FIXME: include zenburn and print stylesheets conditionally}}
+  {{#ifplugin 'highlight'}}
+  <link rel="stylesheet" href="lib/css/zenburn.css">
+  {{/ifplugin}}
+  <!-- Include the appropriate print stylesheet -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    link.media = 'print';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
 
   <!--[if lt IE 9]>
   <script src="lib/js/html5shiv.js"></script>
