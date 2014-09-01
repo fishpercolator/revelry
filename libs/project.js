@@ -64,6 +64,13 @@ Project.prototype = {
     this.copyFromReveal('js', 'reveal.min.js');
   },
 
+  // Rewrite the Revfile.json with any new values loaded from the
+  // config defaults since it was created
+  upgrade: function () {
+    var config = this.config();
+    this.writeFileJSON('Revfile.json', config);
+  },
+
   // Get the config from the current Revfile
   config: function () {
     var revfile = path.join(this.dir,'Revfile.json');

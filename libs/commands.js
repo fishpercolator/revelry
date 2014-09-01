@@ -20,3 +20,9 @@ exports.build = function (opts) {
   var p = new Project('.', opts.target);
   p.build();
 };
+
+// The 'upgrade' command rewrites the Revfile.json
+exports.upgrade = function (opts) {
+  var p = new Project('.');
+  p.upgrade();
+};

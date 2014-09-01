@@ -36,4 +36,8 @@ parser.command('build')
   })
   .callback(commands.build);
 
+parser.command('upgrade')
+  .help('Upgrade the Revfile.js to match the current version of Revelry')
+  .callback(commands.upgrade);
+
 parser.parse();
