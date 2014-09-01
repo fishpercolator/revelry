@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>{{title}}</title>
-  <meta name="description">{{description}}</meta>
-  <meta name="author">{{author}}</meta>
+  <meta name="description" content="{{description}}">
+  <meta name="author" content="{{author}}">
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -12,7 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
   <link rel="stylesheet" href="css/reveal.css">
-  <link rel="stylesheet" href="css/theme/{{theme}}.css" id="theme">
+  <link rel="stylesheet" href="css/theme/{{options.theme}}.css" id="theme">
   <link rel="stylesheet" href="css/custom.css">
 
   {{!# FIXME: include zenburn and print stylesheets conditionally}}
@@ -37,10 +37,7 @@
   <script src="js/reveal.min.js"></script>
 
   <script>
-    {{!# FIXME: Set options here}}
-    Reveal.initialize({
-      theme: "{{theme}}"
-    });
+    Reveal.initialize({{json options}});
   </script>
 </body>
 </html>

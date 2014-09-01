@@ -3,7 +3,10 @@ function Config (overrides) {
     title: '',
     description: '',
     author: '',
-    theme: 'default'
+    options: {
+      theme: 'default',
+      transition: 'default'
+    },
   };
   for (var item in defaults) {
     if (item in overrides) {

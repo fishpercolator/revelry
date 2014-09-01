@@ -48,6 +48,12 @@ Project.prototype = {
     Handlebars.registerPartial('slides', this.readFile('slides.html'));
     Handlebars.registerPartial('header', this.readFile('custom/header.html'));
 
+    // Register a helper that converts an object to JSON for inserting
+    // into a template
+    Handlebars.registerHelper('json', function (config) {
+      return new Handlebars.SafeString(JSON.stringify(config));
+    });
+
     // Compile the index template
     var template = this.template('base');
     this.writeTFile('index.html', template(config));
@@ -58,9 +64,13 @@ Project.prototype = {
 
     // Copy relevant files from Reveal.js
     this.copyFromReveal('css', 'reveal.css');
-    this.copyFromReveal('css/theme', config.theme+'.css');
+    this.copyFromReveal('css/theme', config.options.theme+'.css');
     this.copyFromReveal('lib/js', 'html5shiv.js');
     this.copyFromReveal('lib/js', 'head.min.js');
+    var exts = ['eot', 'svg', 'ttf', 'woff'];
+    for (i in exts) {
+      this.copyFromReveal('lib/font', 'league_gothic-webfont.'+exts[i]);
+    }
     this.copyFromReveal('js', 'reveal.min.js');
   },
 
@@ -75,7 +85,11 @@ Project.prototype = {
   config: function () {
     var revfile = path.join(this.dir,'Revfile.json');
     if (!fs.existsSync(revfile)) throw "Not a Revelry project dir!";
-    return new Config(JSON.parse(fs.readFileSync(revfile)));
+    var config = new Config(JSON.parse(fs.readFileSync(revfile)));
+
+    // Note: Put legacy stuff here if config format changes
+
+    return config;
   },
 
   // Get a template in Handlebars format
