@@ -46,17 +46,22 @@ Project.prototype = {
     // Register partials that will be interpolated into the base
     // template
     Handlebars.registerPartial('slides', this.readFile('slides.html'));
+    Handlebars.registerPartial('header', this.readFile('custom/header.html'));
 
     // Compile the index template
     var template = this.template('base');
     this.writeTFile('index.html', template(config));
+
+    // Copy the image dir
+    this.copyDir('img');
+    this.copyFile('custom/custom.css', 'css/custom.css');
 
     // Copy relevant files from Reveal.js
     this.copyFromReveal('css', 'reveal.css');
     this.copyFromReveal('css/theme', config.theme+'.css');
     this.copyFromReveal('lib/js', 'html5shiv.js');
     this.copyFromReveal('lib/js', 'head.min.js');
-    this.copyFromReveal('js', 'reveal.min.js')
+    this.copyFromReveal('js', 'reveal.min.js');
   },
 
   // Get the config from the current Revfile
@@ -85,7 +90,6 @@ Project.prototype = {
     var dn = path.join(root,name);
     if (mustnt_exist && fs.existsSync(dn))
       throw "Directory already exists: "+dn;
-    console.log(dn);
     return fs.mkdirsSync(dn);
   },
   writeFile: function (name, string) {
@@ -116,6 +120,21 @@ Project.prototype = {
       console.log(target_fn);
       return fs.copySync(fn, target_fn);
     }
+  },
+  copyFile: function (name, target_name) {
+    var fn = path.join(this.dir, name);
+    var target_fn = path.join(this.target, target_name);
+    console.log(target_fn);
+    return fs.copySync(fn, target_fn);
+  },    
+  copyDir: function (fn) {
+    var src    = path.join(this.dir, fn);
+    var target = path.join(this.target, fn);
+    var this_ = this;
+    return fs.copySync(src, target, function (file) {
+      console.log(path.join(this_.target, file));
+      return true;
+    });
   }
 };
 
