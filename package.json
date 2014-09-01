@@ -1,6 +1,6 @@
 {
   "name": "revelry",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Project builder for Reveal.js",
   "main": "revelry.js",
   "bin": {
