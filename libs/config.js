@@ -21,7 +21,11 @@ function Config (overrides) {
     author: '',
     options: {
       theme: 'default',
-      transition: 'default'
+      transition: 'default',
+      controls: true,
+      progress: true,
+      history: true,
+      center: true
     },
     plugins: ['markdown', 'notes']
   };
