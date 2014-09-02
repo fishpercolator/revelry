@@ -87,7 +87,13 @@ Project.prototype = {
     });
     this.copyFromReveal('js/reveal.min.js');
     _.each(config.get_files_for_dependencies(), function (fn) {
-      this_.copyFromReveal(fn);
+      // If this is a plugin, copy the whole plugin
+      if (fn.indexOf("plugin") >= 0) {
+        this_.copyFromReveal(path.dirname(fn));
+      }
+      else {
+        this_.copyFromReveal(fn);
+      }
     });
   },
 
