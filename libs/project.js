@@ -52,7 +52,10 @@ Project.prototype = {
     // Register a helper that converts an object to JSON for inserting
     // into a template
     Handlebars.registerHelper('json', function (config) {
-      return new Handlebars.SafeString(JSON.stringify(config));
+      var json = JSON.stringify(config);
+      // FIXME: UGH (see issue #12)
+      json = json.replace("highlight.js\",", "highlight.js\", callback: function() { hljs.initHighlightingOnLoad(); },");
+      return new Handlebars.SafeString(json);
     });
     Handlebars.registerHelper('ifplugin', function (name, options) {
       if (this.has_plugin(name)) {
