@@ -2,6 +2,7 @@ var _ = require('underscore');
 var fs = require('fs-extra');
 var path = require('path');
 var toSource = require('tosource');
+var npm = require('npm');
 var Handlebars = require('handlebars');
 var Config = require('../libs/config.js');
 
@@ -91,13 +92,30 @@ Project.prototype = {
     this.copyFromReveal('js/reveal.min.js');
     _.each(config.get_files_for_dependencies(), function (fn) {
       // If this is a plugin, copy the whole plugin
-      if (fn.indexOf("plugin") >= 0) {
+      if (fn.indexOf("plugin") == 0) {
         this_.copyFromReveal(path.dirname(fn));
       }
-      else {
+      // If it's something from Reveal's lib dir, copy it across
+      else if (fn.indexOf("lib") == 0) {
         this_.copyFromReveal(fn);
       }
+      // Otherwise, assume it's an npm thingy and copy the package.json
+      else {
+	this_.copyFromReveal('package.json');
+      }
     });
+
+    // Does the target have a package.json? OK, we need to npm install
+    if (fs.existsSync(path.join(this.target, 'package.json'))) {
+      process.chdir(this.target);
+      npm.load({}, function (er) {
+	if (er) throw er;
+	npm.commands.install(function (er) {
+	  if (er) throw er;
+	});
+      });
+    }
+    
   },
 
   // Rewrite the Revfile.json with any new values loaded from the
@@ -111,10 +129,12 @@ Project.prototype = {
   config: function () {
     var revfile = path.join(this.dir,'Revfile.json');
     if (!fs.existsSync(revfile)) throw "Not a Revelry project dir!";
-    var config = new Config(JSON.parse(fs.readFileSync(revfile)));
+
+    // We use eval instead of JSON.parse() because the user may have
+    // put functions and the like in there.
+    var config = new Config(eval('('+fs.readFileSync(revfile)+')'));
 
     // Note: Put legacy stuff here if config format changes
-
     return config;
   },
 
