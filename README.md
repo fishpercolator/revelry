@@ -37,7 +37,10 @@ The anatomy of a Revelry project
 
 **Revfile.json** is where all the configuration for your presentation
   goes. In here you can specify the title and description as well as
-  Reveal options such as theme and plugins.
+  Reveal options such as theme and plugins. (Note: Revfile.json is
+  really JavaScript code, rather than JSON, so you can include
+  functions and other complex types in here. The usual warnings about
+  editing executable code apply.)
 
 **slides.html** is a [Handlebars](http://handlebarsjs.com/)-enabled
   HTML file containing your slides. Each slide is given an HTML

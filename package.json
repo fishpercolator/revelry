@@ -23,6 +23,7 @@
     "handlebars": "2.0.x",
     "reveal.js": "2.6.x",
     "fs-extra": "0.11.x",
-    "underscore": "1.7.x"
+    "underscore": "1.7.x",
+    "tosource": "0.1.x"
   }
 }

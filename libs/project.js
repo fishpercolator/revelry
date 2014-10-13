@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var fs = require('fs-extra');
 var path = require('path');
+var toSource = require('tosource');
 var Handlebars = require('handlebars');
 var Config = require('../libs/config.js');
 
@@ -49,13 +50,12 @@ Project.prototype = {
     Handlebars.registerPartial('slides', this.readFile('slides.html'));
     Handlebars.registerPartial('header', this.readFile('custom/header.html'));
 
-    // Register a helper that converts an object to JSON for inserting
-    // into a template
-    Handlebars.registerHelper('json', function (config) {
-      var json = JSON.stringify(config);
-      // FIXME: UGH (see issue #12)
-      json = json.replace("highlight.js\",", "highlight.js\", callback: function() { hljs.initHighlightingOnLoad(); },");
-      return new Handlebars.SafeString(json);
+    // Register a helper that converts an object to source code for
+    // inserting into a template (this is different from JSON, because
+    // it includes function properties).
+    Handlebars.registerHelper('source', function (obj) {
+      var source = toSource(obj);
+      return new Handlebars.SafeString(source);
     });
     Handlebars.registerHelper('ifplugin', function (name, options) {
       if (this.has_plugin(name)) {
