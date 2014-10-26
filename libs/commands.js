@@ -11,18 +11,18 @@ exports.new = function (opts) {
     description: opts.description || ""
   });
 
-  var p = new Project(dir);
+  var p = new Project(dir, undefined, opts.quiet);
   p.create(config, opts.haml);
 };
 
 // The 'build' command builds the HTML for a Revelry presentation
 exports.build = function (opts) {
-  var p = new Project('.', opts.target);
+  var p = new Project('.', opts.target, opts.quiet);
   p.build();
 };
 
 // The 'upgrade' command rewrites the Revfile.json
 exports.upgrade = function (opts) {
-  var p = new Project('.');
+  var p = new Project('.', undefined, opts.quiet);
   p.upgrade();
 };

@@ -8,7 +8,10 @@ var Handlebars = require('handlebars');
 var Config = require('../libs/config.js');
 
 // Constructor for project
-function Project (theDir, theTarget) {
+function Project (theDir, theTarget, quiet) {
+  // Remember if we initialized with quiet mode
+  this.quiet = quiet;
+
   // dir is the project dir
   this.dir = path.normalize(theDir || '.');
   // target is the dir we build to (defaults to this.dir/www)
@@ -145,6 +148,12 @@ Project.prototype = {
     return config;
   },
 
+  // Log to console unless in quiet mode
+  log: function (msg) {
+    if (!this.quiet)
+      console.log(msg);
+  },
+
   // Get a template in Handlebars format
   template: function (name, contents_only) {
     var contents   = fs.readFileSync(__dirname+'/../templates/'+name).
@@ -177,7 +186,7 @@ Project.prototype = {
   },
   _writeFile: function (root, name, string) {
     var fn = path.join(root,name);
-    console.log(fn);
+    this.log(fn);
     return fs.writeFileSync(fn, (string||''));
   },
   readFile: function (name) {
@@ -200,14 +209,14 @@ Project.prototype = {
     var target_fn = path.join(this.target, name);
     fs.ensureDirSync(path.dirname(target_fn));
     if (!fs.existsSync(target_fn)) {
-      console.log(target_fn);
+      this.log(target_fn);
       return fs.copySync(fn, target_fn);
     }
   },
   copyFile: function (name, target_name) {
     var fn = path.join(this.dir, name);
     var target_fn = path.join(this.target, target_name);
-    console.log(target_fn);
+    this.log(target_fn);
     return fs.copySync(fn, target_fn);
   },    
   copyDir: function (fn) {
@@ -215,7 +224,7 @@ Project.prototype = {
     var target = path.join(this.target, fn);
     var this_ = this;
     return fs.copySync(src, target, function (file) {
-      console.log(path.join(this_.target, file));
+      this.log(path.join(this_.target, file));
       return true;
     });
   }

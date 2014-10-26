@@ -9,6 +9,11 @@ var parser = require('nomnom').options({
     callback: function () {
       return "v"+JSON.parse(require('fs').readFileSync(__dirname+'/package.json'))['version'];
     }
+  },
+  quiet: {
+    flag: true,
+    abbr: 'q',
+    help: 'Suppress non-essential messages',
   }
 });
 

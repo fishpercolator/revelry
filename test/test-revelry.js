@@ -129,7 +129,7 @@ function createProject(path, target, config, haml) {
       description: "☃☃☃",
       author: "John Smith"
     });
-  var p = new Project(path, target);
+  var p = new Project(path, target, true);
   p.create(config, haml);
   return p;
 };
