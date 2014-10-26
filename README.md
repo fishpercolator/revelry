@@ -41,7 +41,7 @@ for the list of planned features and known issues.
 
 **slides.html** is a [Handlebars](http://handlebarsjs.com/)-enabled
   HTML file containing your slides. Each slide is given an HTML
-  `&lt;section&gt;`. The contents of `Revfile.json` are used as the
+  `<section>`. The contents of `Revfile.json` are used as the
   Handlebars context.
 
 **img/** is a directory where you can put images you need for your
@@ -56,7 +56,7 @@ for the list of planned features and known issues.
 ```html
 <section>
   <h1>{{title}}</h1>
-  <h2>{{description</h2>
+  <h2>{{description}}</h2>
 </section>
 <section>
   <h2>My first slide</h2>
@@ -144,7 +144,7 @@ class, like this:
 If you need to insert any additional info into the HTML header (such
 as meta tags or links to CSS or RSS), you can edit the `header.html`
 file. The contents of this file will be inserted into the
-`&lt;head&gt;` of the presentation.
+`<head>` of the presentation.
 
 ## Haml support
 
