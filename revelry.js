@@ -2,7 +2,15 @@
 
 var commands = require('./libs/commands.js');
 
-var parser = require('nomnom');
+var parser = require('nomnom').options({
+  version: {
+    flag: true,
+    help: 'Print version',
+    callback: function () {
+      return "v"+JSON.parse(require('fs').readFileSync(__dirname+'/package.json'))['version'];
+    }
+  }
+});
 
 parser.command('new')
   .help('Create a new Revelry project')
@@ -20,6 +28,10 @@ parser.command('new')
     description: {
       abbr: 'd',
       help: 'A one-line description of the presentation'
+    },
+    haml: {
+      flag: true,
+      help: 'Use HAML instead of HTML for the main presentation template'
     }
   })
   .callback(commands.new);

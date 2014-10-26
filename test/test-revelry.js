@@ -94,13 +94,35 @@ module.exports = {
     test.ok(css.match('h2 { color: blue; }'));
 
     test.done();
+  },
+  haml: function (test) {
+    var p = createProject(this.path, undefined, undefined, true);
+
+    var haml_fn = path.join(this.path, 'slides.haml');
+    test.ok(fs.existsSync(haml_fn));
+
+    // Overwrite this file with our own template
+    p.writeFile('slides.haml', "%section\n  %h3.someclass {{title}}\n  %h4{style: 'color:blue'} {{description}}");
+    // Put something in the header.html
+    p.writeFile(path.join('custom', 'header.html'),
+		'<meta name="x-test" description="test">');
+    
+    p.build();
+
+    var index = fs.readFileSync(path.join(this.path, 'www', 'index.html'),
+				encoding='utf8');
+    test.ok(index.match('<h3 class="someclass">Test presentation</h3>'));
+    test.ok(index.match('<h4 style="color:blue">☃☃☃</h4>'));
+    test.ok(index.match('<meta name="x-test" description="test">'));
+
+    test.done();
   }
   // TODO: Test for upgrade?
 };
 
 // Create a test project in this.path with optional target. Config is
 // a handful of test defaults if not specified
-function createProject(path, target, config) {
+function createProject(path, target, config, haml) {
   if (config == undefined)
     config = new Config({
       title: "Test presentation", 
@@ -108,6 +130,6 @@ function createProject(path, target, config) {
       author: "John Smith"
     });
   var p = new Project(path, target);
-  p.create(config);
+  p.create(config, haml);
   return p;
 };

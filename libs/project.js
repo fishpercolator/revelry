@@ -3,6 +3,7 @@ var fs = require('fs-extra');
 var path = require('path');
 var toSource = require('tosource');
 var npm = require('npm');
+var haml = require('hamljs');
 var Handlebars = require('handlebars');
 var Config = require('../libs/config.js');
 
@@ -21,13 +22,19 @@ Project.prototype = {
   constructor: Project,
 
   // Create a new project in this.dir with the specified config
-  create: function (config) {
+  create: function (config, haml) {
     this.createDir('', true);
 
     // Create the Revfile and slides.html template using the config
     this.writeFileJSON('Revfile.json', config);
-    var slides = this.template('slides', true);
-    this.writeFile('slides.html', slides);
+    if (haml) {
+      var slides = this.template('slides.haml', true);
+      this.writeFile('slides.haml', slides);
+    }
+    else {
+      var slides = this.template('slides.html', true);
+      this.writeFile('slides.html', slides);
+    }
 
     // Create a .gitignore file and some stubs
     this.writeFile('.gitignore', "www/\n");
@@ -48,8 +55,8 @@ Project.prototype = {
 
     // Register partials that will be interpolated into the base
     // template
-    Handlebars.registerPartial('slides', this.readFile('slides.html'));
-    Handlebars.registerPartial('header', this.readFile('custom/header.html'));
+    Handlebars.registerPartial('slides', this.readHtmlOrHamlFile('slides'));
+    Handlebars.registerPartial('header', this.readHtmlOrHamlFile('custom/header'));
 
     // Register a helper that converts an object to source code for
     // inserting into a template (this is different from JSON, because
@@ -68,7 +75,7 @@ Project.prototype = {
     config.options.dependencies = config.get_dependencies();
 
     // Compile the index template
-    var template = this.template('base');
+    var template = this.template('base.html');
     this.writeTFile('index.html', template(config));
 
     // Copy the image dir
@@ -140,7 +147,7 @@ Project.prototype = {
 
   // Get a template in Handlebars format
   template: function (name, contents_only) {
-    var contents   = fs.readFileSync(__dirname+'/../templates/'+name+'.html').
+    var contents   = fs.readFileSync(__dirname+'/../templates/'+name).
       toString('utf8');
     if (contents_only) return contents;
     return Handlebars.compile(contents);
@@ -175,9 +182,19 @@ Project.prototype = {
   },
   readFile: function (name) {
     var fn = path.join(this.dir,name);
-    var contents = fs.readFileSync(fn);
-    return contents.toString('utf8');
+    return fs.readFileSync(fn, encoding='utf8');
   },
+  // Specify a file (without extension) which may be HTML or
+  // HAML. Return the HTML regardless.
+  readHtmlOrHamlFile: function (name) {
+    var fn = path.join(this.dir,name);
+    if (fs.existsSync(fn+'.haml')) {
+      return haml.render(this.readFile(name+'.haml'));
+    }
+    else {
+      return this.readFile(name+'.html');
+    }
+  },      
   copyFromReveal: function (name) {
     var fn = path.join(this.reveal_dir, name);
     var target_fn = path.join(this.target, name);

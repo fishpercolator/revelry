@@ -12,7 +12,7 @@ exports.new = function (opts) {
   });
 
   var p = new Project(dir);
-  p.create(config);
+  p.create(config, opts.haml);
 };
 
 // The 'build' command builds the HTML for a Revelry presentation

@@ -24,7 +24,8 @@
     "reveal.js": "2.6.x",
     "fs-extra": "0.11.x",
     "underscore": "1.7.x",
-    "tosource": "0.1.x"
+    "tosource": "0.1.x",
+    "hamljs": "0.6.x"
   },
   "devDependencies": {
     "nodeunit": "0.9.x",
