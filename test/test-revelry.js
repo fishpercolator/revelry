@@ -33,10 +33,69 @@ module.exports = {
     test.ok(fs.existsSync(slidespath));
     var slides = fs.readFileSync(slidespath, encoding='utf8');
     test.ok(slides.match("<h1>{{title}}</h1>"));
-    var custompath = path.join(this.path, 'custom/custom.css');
+    var custompath = path.join(this.path, 'custom', 'custom.css');
     test.ok(fs.existsSync(custompath));
     test.done();
+  },
+  build: function(test) {
+    var p = createProject(this.path);
+
+    // Try building the project with the default setup and check it
+    // looks the way we expect
+    p.build();
+
+    var this_ = this;
+    var targetFn = function () {
+      // This horrid construction pushes the arguments to this
+      // function onto the end of an array.
+      var args = [this_.path, 'www'].
+	concat(Array.prototype.slice.call(arguments));
+      return path.join.apply(this, args);
+    };
+    test.ok(fs.existsSync(targetFn('index.html')));
+    test.ok(fs.existsSync(targetFn('js', 'reveal.min.js')));
+    test.ok(fs.existsSync(targetFn('plugin', 'markdown', 'example.md')));
+    test.ok(!fs.existsSync(targetFn('plugin', 'zoom-js')));
+    test.ok(!fs.existsSync(targetFn('lib', 'css', 'zenburn.css')));
+
+    // Check the index.html contains our default config
+    var index = fs.readFileSync(targetFn('index.html'), encoding='utf8');
+    test.ok(index.match('<h1>Test presentation</h1>'));
+    test.ok(index.match('<h2>☃☃☃</h2>'));
+    test.ok(index.match('<meta name="author" content="John Smith">'));
+    test.ok(index.match('plugin/markdown/marked.js'));
+    test.ok(!index.match('plugin/zoom-js/zoom.js'));
+    test.ok(!index.match('lib/css/zenburn.css'));
+
+    // Change config
+    var config = p.config();
+    config.options.controls = false;
+    config.plugins.push('highlight');
+    config.author = 'The Doctor';
+    p.writeFileJSON('Revfile.json', config);
+    
+    // Modify the header & CSS
+    p.writeFile(path.join('custom', 'header.html'), 
+		'<meta name="x-test" description="test">');
+    p.writeFile(path.join('custom', 'custom.css'),
+		'h2 { color: blue; }');
+    
+    p.build();
+    test.ok(fs.existsSync(targetFn('lib', 'css', 'zenburn.css')));
+    index = fs.readFileSync(targetFn('index.html'), encoding='utf8');
+    test.ok(index.match('<meta name="author" content="The Doctor">'));
+    test.ok(index.match('lib/css/zenburn.css'));
+    test.ok(index.match('controls:false'));
+    test.ok(!index.match('controls:true'));
+    test.ok(index.match('history:true'));
+    test.ok(index.match('<meta name="x-test" description="test">'));
+
+    var css = fs.readFileSync(targetFn('css', 'custom.css'), encoding='utf8');
+    test.ok(css.match('h2 { color: blue; }'));
+
+    test.done();
   }
+  // TODO: Test for upgrade?
 };
 
 // Create a test project in this.path with optional target. Config is
