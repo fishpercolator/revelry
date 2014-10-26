@@ -4,7 +4,7 @@ var Config  = require('../libs/config.js');
 
 // The 'new' command creates a new Revelry project
 exports.new = function (opts) {
-  var dir = './'+opts.name;
+  var dir = opts.name;
 
   var config = new Config({
     title: opts.title || opts.name,

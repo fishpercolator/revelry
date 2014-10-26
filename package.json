@@ -7,7 +7,7 @@
     "revelry": "revelry.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/nodeunit test"
   },
   "repository": {
     "type": "git",
@@ -25,5 +25,9 @@
     "fs-extra": "0.11.x",
     "underscore": "1.7.x",
     "tosource": "0.1.x"
+  },
+  "devDependencies": {
+    "nodeunit": "0.9.x",
+    "tmp": "0.0.x"
   }
 }
