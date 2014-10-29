@@ -224,7 +224,7 @@ Project.prototype = {
     var target = path.join(this.target, fn);
     var this_ = this;
     return fs.copySync(src, target, function (file) {
-      this.log(path.join(this_.target, file));
+      this_.log(path.join(this_.target, file));
       return true;
     });
   }
