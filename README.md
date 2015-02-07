@@ -16,6 +16,13 @@ for the list of planned features and known issues.
 
     $ npm install -g revelry
 
+## Alternative: Using Docker
+
+If you have Docker installed, you can use Revelry without needing to
+install anything. For example:
+
+    $ docker run -v $(pwd):/work pedanticgit/revelry new myproject
+
 ## Creating a project
 
     $ revelry new myproject
