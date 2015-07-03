@@ -5,8 +5,8 @@ var PLUGIN_CONFIG = {
   markdown:       [{ src: 'plugin/markdown/marked.js'},
 		   { src: 'plugin/markdown/markdown.js'}],
   highlight:      [{ src: 'plugin/highlight/highlight.js',
-		     async: true, callback: function() { 
-		       hljs.initHighlightingOnLoad(); 
+		     async: true, callback: function() {
+		       hljs.initHighlightingOnLoad();
 		  }}],
   zoom:           [{ src: 'plugin/zoom-js/zoom.js', async: true}],
   notes:          [{ src: 'plugin/notes/notes.js', async: true}],
@@ -25,8 +25,8 @@ function Config (overrides) {
     description: '',
     author: '',
     options: {
-      theme: 'default',
-      transition: 'default',
+      theme: 'black',
+      transition: 'slide',
       controls: true,
       progress: true,
       history: true,

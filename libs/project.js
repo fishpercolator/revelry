@@ -96,10 +96,16 @@ Project.prototype = {
     this.copyFromReveal('lib/js/html5shiv.js');
     this.copyFromReveal('lib/js/head.min.js');
     var this_ = this;
-    _.each(['eot', 'svg', 'ttf', 'woff'], function (ext) {
-      this_.copyFromReveal('lib/font/league_gothic-webfont.'+ext);
+    _.each(['css', 'eot', 'ttf', 'woff'], function (ext) {
+      this_.copyFromReveal('lib/font/league-gothic/league-gothic.'+ext);
     });
-    this.copyFromReveal('js/reveal.min.js');
+    _.each(['italic', 'regular', 'semibold', 'semibolditalic'], function (weight) {
+      _.each(['eot','ttf','woff'], function (ext) {
+        this_.copyFromReveal('lib/font/source-sans-pro/source-sans-pro-'+weight+'.'+ext);
+      })
+    })
+    // FIXME: We should run Grunt on Reveal and copy only the minified JS
+    this.copyFromReveal('js/reveal.js');
     _.each(config.get_files_for_dependencies(), function (fn) {
       // If this is a plugin, copy the whole plugin
       if (fn.indexOf("plugin") == 0) {
@@ -125,7 +131,7 @@ Project.prototype = {
 	});
       });
     }
-    
+
   },
 
   // Rewrite the Revfile.json with any new values loaded from the
@@ -203,7 +209,7 @@ Project.prototype = {
     else {
       return this.readFile(name+'.html');
     }
-  },      
+  },
   copyFromReveal: function (name) {
     var fn = path.join(this.reveal_dir, name);
     var target_fn = path.join(this.target, name);
@@ -218,7 +224,7 @@ Project.prototype = {
     var target_fn = path.join(this.target, target_name);
     this.log(target_fn);
     return fs.copySync(fn, target_fn);
-  },    
+  },
   copyDir: function (fn) {
     var src    = path.join(this.dir, fn);
     var target = path.join(this.target, fn);

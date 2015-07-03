@@ -20,13 +20,13 @@
   },
   "dependencies": {
     "nomnom": "1.8.x",
-    "handlebars": "2.0.x",
-    "reveal.js": "2.6.x",
-    "fs-extra": "0.11.x",
-    "underscore": "1.7.x",
+    "handlebars": "3.0.x",
+    "reveal.js": "3.1.x",
+    "fs-extra": "0.20.x",
+    "underscore": "1.8.x",
     "tosource": "0.1.x",
     "hamljs": "0.6.x",
-    "npm": "2.4.x"
+    "npm": "2.12.x"
   },
   "devDependencies": {
     "nodeunit": "0.9.x",

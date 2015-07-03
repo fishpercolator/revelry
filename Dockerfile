@@ -7,4 +7,3 @@ ADD . /app
 
 WORKDIR /work
 ENTRYPOINT ["/app/revelry.js"]
-

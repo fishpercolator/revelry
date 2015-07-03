@@ -21,7 +21,11 @@ for the list of planned features and known issues.
 If you have Docker installed, you can use Revelry without needing to
 install anything. For example:
 
-    $ docker run -v $(pwd):/work pedanticgit/revelry new myproject
+    $ docker run -v $(pwd):/work -u $(id -u) fishpercolator/revelry new myproject
+
+Or create an alias:
+
+    $ alias revelry='docker run -v $(pwd):/work -u $(id -u) fishpercolator/revelry'
 
 ## Creating a project
 
@@ -193,4 +197,3 @@ Released under a BSD-style license.
 Fork me on Github: <https://github.com/pedantic-git/revelry>
 
 Issue tracker: <https://github.com/pedantic-git/revelry/issues>
-
