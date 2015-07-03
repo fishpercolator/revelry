@@ -53,7 +53,7 @@ module.exports = {
       return path.join.apply(this, args);
     };
     test.ok(fs.existsSync(targetFn('index.html')));
-    test.ok(fs.existsSync(targetFn('js', 'reveal.min.js')));
+    test.ok(fs.existsSync(targetFn('js', 'reveal.js'))); // FIXME
     test.ok(fs.existsSync(targetFn('plugin', 'markdown', 'example.md')));
     test.ok(!fs.existsSync(targetFn('plugin', 'zoom')));
     test.ok(!fs.existsSync(targetFn('lib', 'css', 'zenburn.css')));
@@ -73,13 +73,13 @@ module.exports = {
     config.plugins.push('highlight');
     config.author = 'The Doctor';
     p.writeFileJSON('Revfile.json', config);
-    
+
     // Modify the header & CSS
-    p.writeFile(path.join('custom', 'header.html'), 
+    p.writeFile(path.join('custom', 'header.html'),
 		'<meta name="x-test" description="test">');
     p.writeFile(path.join('custom', 'custom.css'),
 		'h2 { color: blue; }');
-    
+
     p.build();
     test.ok(fs.existsSync(targetFn('lib', 'css', 'zenburn.css')));
     index = fs.readFileSync(targetFn('index.html'), encoding='utf8');
@@ -106,7 +106,7 @@ module.exports = {
     // Put something in the header.html
     p.writeFile(path.join('custom', 'header.html'),
 		'<meta name="x-test" description="test">');
-    
+
     p.build();
 
     var index = fs.readFileSync(path.join(this.path, 'www', 'index.html'),
@@ -125,7 +125,7 @@ module.exports = {
 function createProject(path, target, config, haml) {
   if (config == undefined)
     config = new Config({
-      title: "Test presentation", 
+      title: "Test presentation",
       description: "☃☃☃",
       author: "John Smith"
     });
