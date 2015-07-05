@@ -157,40 +157,40 @@ as meta tags or links to CSS or RSS), you can edit the `header.html`
 file. The contents of this file will be inserted into the
 `<head>` of the presentation.
 
-## Haml support
+## Jade support
 
-Revelry also supports templates in [Haml](http://haml.info/) format,
+Revelry also supports templates in [Jade](http://jade-lang.com/) format,
 which is a more concise language than HTML and lends itself quite well
 to writing presentations.
 
-If you have a `slides.haml` instead of `slides.html`, it will be
-parsed as a Haml file.
+If you have a `slides.jade` instead of `slides.html`, it will be
+parsed as a Jade file.
 
-You can also create a new Haml project outright, e.g.:
+You can also create a new Jade project outright, e.g.:
 
-    $ revelry new myproject --haml
+    $ revelry new myproject --jade
 
-You can still use Handlebars, although obviously the more
-HTML-specific features of Handlebars will probably result in compile
-errors if you try to use them (check the Haml documentation to see if
-your feature is supported directly in HAML).
+The Revfile context will be passed to Jade as locals, so you can use its
+values the same way you would in Handlebars.
 
-The earlier example, expressed as Haml, is:
+The earlier example, expressed as Jade, is:
 
-```haml
-%section
-  %h1 {{title}}
-  %h2 {{description}}
-%section
-  %h2 My first slide
-  %ul
-    %li.fragment Bullet one
-	%li.fragment{style: 'color:red'} Bullet two
+```jade
+section
+  h1= title
+  h2= description
+section
+  h2 My first slide
+  ul
+    li.fragment Bullet one
+	  li.fragment(style='color:red') Bullet two
 ```
+
+**Note**: The resulting HTML is still processed by Handlebars.
 
 ## Author info
 
-Copyright 2014, Rich Daley.
+Copyright 2014-2015, Rich Daley.
 
 Released under a BSD-style license.
 

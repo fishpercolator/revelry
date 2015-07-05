@@ -3,7 +3,7 @@ var fs = require('fs-extra');
 var path = require('path');
 var toSource = require('tosource');
 var npm = require('npm');
-var haml = require('hamljs');
+var jade = require('jade');
 var Handlebars = require('handlebars');
 var Config = require('../libs/config.js');
 
@@ -25,14 +25,14 @@ Project.prototype = {
   constructor: Project,
 
   // Create a new project in this.dir with the specified config
-  create: function (config, haml) {
+  create: function (config, jade) {
     this.createDir('', true);
 
     // Create the Revfile and slides.html template using the config
     this.writeFileJSON('Revfile.json', config);
-    if (haml) {
-      var slides = this.template('slides.haml', true);
-      this.writeFile('slides.haml', slides);
+    if (jade) {
+      var slides = this.template('slides.jade', true);
+      this.writeFile('slides.jade', slides);
     }
     else {
       var slides = this.template('slides.html', true);
@@ -58,8 +58,8 @@ Project.prototype = {
 
     // Register partials that will be interpolated into the base
     // template
-    Handlebars.registerPartial('slides', this.readHtmlOrHamlFile('slides'));
-    Handlebars.registerPartial('header', this.readHtmlOrHamlFile('custom/header'));
+    Handlebars.registerPartial('slides', this.readHtmlOrJadeFile('slides'));
+    Handlebars.registerPartial('header', this.readHtmlOrJadeFile('custom/header'));
 
     // Register a helper that converts an object to source code for
     // inserting into a template (this is different from JSON, because
@@ -200,11 +200,13 @@ Project.prototype = {
     return fs.readFileSync(fn, encoding='utf8');
   },
   // Specify a file (without extension) which may be HTML or
-  // HAML. Return the HTML regardless.
-  readHtmlOrHamlFile: function (name) {
-    var fn = path.join(this.dir,name);
-    if (fs.existsSync(fn+'.haml')) {
-      return haml.render(this.readFile(name+'.haml'));
+  // Jade. Return the HTML regardless.
+  readHtmlOrJadeFile: function (name) {
+    var jadefn = path.join(this.dir,name) + '.jade';
+    if (fs.existsSync(jadefn)) {
+      // Pass the config() as arguments to the Jade so we can access its
+      // variables inside the Jade templates
+      return jade.renderFile(jadefn, this.config());
     }
     else {
       return this.readFile(name+'.html');

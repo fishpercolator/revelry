@@ -34,9 +34,9 @@ parser.command('new')
       abbr: 'd',
       help: 'A one-line description of the presentation'
     },
-    haml: {
+    jade: {
       flag: true,
-      help: 'Use HAML instead of HTML for the main presentation template'
+      help: 'Use Jade instead of HTML for the main presentation template'
     }
   })
   .callback(commands.new);

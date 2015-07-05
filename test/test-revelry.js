@@ -95,14 +95,14 @@ module.exports = {
 
     test.done();
   },
-  haml: function (test) {
+  jade: function (test) {
     var p = createProject(this.path, undefined, undefined, true);
 
-    var haml_fn = path.join(this.path, 'slides.haml');
-    test.ok(fs.existsSync(haml_fn));
+    var jade_fn = path.join(this.path, 'slides.jade');
+    test.ok(fs.existsSync(jade_fn));
 
     // Overwrite this file with our own template
-    p.writeFile('slides.haml', "%section\n  %h3.someclass {{title}}\n  %h4{style: 'color:blue'} {{description}}");
+    p.writeFile('slides.jade', "section\n  h3.someclass= title\n  h4(style='color:blue')= description");
     // Put something in the header.html
     p.writeFile(path.join('custom', 'header.html'),
 		'<meta name="x-test" description="test">');
@@ -122,7 +122,7 @@ module.exports = {
 
 // Create a test project in this.path with optional target. Config is
 // a handful of test defaults if not specified
-function createProject(path, target, config, haml) {
+function createProject(path, target, config, jade) {
   if (config == undefined)
     config = new Config({
       title: "Test presentation",
@@ -130,6 +130,6 @@ function createProject(path, target, config, haml) {
       author: "John Smith"
     });
   var p = new Project(path, target, true);
-  p.create(config, haml);
+  p.create(config, jade);
   return p;
 };
