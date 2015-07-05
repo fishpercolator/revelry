@@ -183,7 +183,7 @@ section
   h2 My first slide
   ul
     li.fragment Bullet one
-	  li.fragment(style='color:red') Bullet two
+    li.fragment(style='color:red') Bullet two
 ```
 
 **Note**: The resulting HTML is still processed by Handlebars.
