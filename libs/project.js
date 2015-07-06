@@ -104,8 +104,7 @@ Project.prototype = {
         this_.copyFromReveal('lib/font/source-sans-pro/source-sans-pro-'+weight+'.'+ext);
       })
     })
-    // FIXME: We should run Grunt on Reveal and copy only the minified JS
-    this.copyFromReveal('js/reveal.js');
+    this.copyFromReveal('js/reveal.min.js');
     _.each(config.get_files_for_dependencies(), function (fn) {
       // If this is a plugin, copy the whole plugin
       if (fn.indexOf("plugin") == 0) {

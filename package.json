@@ -26,9 +26,12 @@
     "underscore": "1.8.x",
     "tosource": "0.1.x",
     "jade": "1.11.x",
-    "npm": "2.12.x"
+    "npm": "2.12.x",
+    "grunt": "0.4.x",
+    "grunt-subgrunt": "0.4.x"
   },
   "devDependencies": {
+    "grunt-contrib-nodeunit": "0.4.x",
     "nodeunit": "0.9.x",
     "tmp": "0.0.x"
   }

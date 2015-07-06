@@ -53,7 +53,7 @@ module.exports = {
       return path.join.apply(this, args);
     };
     test.ok(fs.existsSync(targetFn('index.html')));
-    test.ok(fs.existsSync(targetFn('js', 'reveal.js'))); // FIXME
+    test.ok(fs.existsSync(targetFn('js', 'reveal.min.js')));
     test.ok(fs.existsSync(targetFn('plugin', 'markdown', 'example.md')));
     test.ok(!fs.existsSync(targetFn('plugin', 'zoom')));
     test.ok(!fs.existsSync(targetFn('lib', 'css', 'zenburn.css')));
