@@ -1,4 +1,4 @@
-FROM google/nodejs
+FROM node:0.12.6
 
 WORKDIR /app
 ADD package.json /app/
