@@ -17,6 +17,9 @@ var parser = require('nomnom').options({
   }
 });
 
+parser.nocommand()
+  .callback(function () { parser.print(parser.getUsage()); });
+
 parser.command('new')
   .help('Create a new Revelry project')
   .options({
