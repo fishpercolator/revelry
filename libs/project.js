@@ -61,6 +61,19 @@ Project.prototype = {
     Handlebars.registerPartial('slides', this.readHtmlOrJadeFile('slides'));
     Handlebars.registerPartial('header', this.readHtmlOrJadeFile('custom/header'));
 
+    // Find all other HTML and Jade files in the current dir (skipping 'slides'
+    // since we've already done that)
+    var this_ = this;
+    fs.readdirSync(this.dir).forEach(function (fn) {
+      var matches = fn.match(/^(\w+)\.(jade|html)$/);
+      if (matches) {
+        var name = matches[1];
+        if (name != 'slides') {
+          Handlebars.registerPartial(name, this_.readHtmlOrJadeFile(name));
+        }
+      }
+    });
+
     // Register a helper that converts an object to source code for
     // inserting into a template (this is different from JSON, because
     // it includes function properties).

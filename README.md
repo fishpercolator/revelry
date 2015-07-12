@@ -64,7 +64,7 @@ Or create an alias:
 
 ## Example slides.html
 
-```html
+```handlebars
 <section>
   <h1>{{title}}</h1>
   <h2>{{description}}</h2>
@@ -76,6 +76,29 @@ Or create an alias:
 	<li class="fragment" style="color:red">Bullet two</li>
   </ul>
 </section>
+```
+
+## Partials
+
+You can break your presentation into multiple files, which can be a mixture of
+Handlebars and Jade. Then you can include them in each other using each
+language's native include syntax. For example:
+
+```handlebars
+<section>
+  <h1>Handlebars example</h1>
+</section>
+{{! Include intro.html or intro.jade}}
+{{> intro}}
+```
+
+```jade
+section
+  h1 Jade example
+//- Include another Jade file
+include intro.jade
+//- Include a Handlebars file
+include:handlebars intro.html
 ```
 
 ## Building
@@ -190,10 +213,10 @@ section
 
 ## Author info
 
-Copyright 2014-2015, Rich Daley.
+Copyright 2014-2015, Fish Percolator.
 
 Released under a BSD-style license.
 
-Fork me on Github: <https://github.com/pedantic-git/revelry>
+Fork me on Github: <https://github.com/fishpercolator/revelry>
 
-Issue tracker: <https://github.com/pedantic-git/revelry/issues>
+Issue tracker: <https://github.com/fishpercolator/revelry/issues>

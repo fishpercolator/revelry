@@ -48,8 +48,7 @@ module.exports = {
     var targetFn = function () {
       // This horrid construction pushes the arguments to this
       // function onto the end of an array.
-      var args = [this_.path, 'www'].
-	concat(Array.prototype.slice.call(arguments));
+      var args = [this_.path, 'www'].concat(Array.prototype.slice.call(arguments));
       return path.join.apply(this, args);
     };
     test.ok(fs.existsSync(targetFn('index.html')));
@@ -114,6 +113,22 @@ module.exports = {
     test.ok(index.match('<h3 class="someclass">Test presentation</h3>'));
     test.ok(index.match('<h4 style="color:blue">☃☃☃</h4>'));
     test.ok(index.match('<meta name="x-test" description="test">'));
+
+    test.done();
+  },
+  partials: function (test) {
+    var p = createProject(this.path);
+    p.writeFile('slides.html', "<section><h1>{{title}}</h1></section><section>{{> moreinfo}}</section><section>{{> jaded}}</section>");
+    p.writeFile('moreinfo.html', "<section>{{description}}</section>");
+    p.writeFile('jaded.jade', "section\n  h2 Jade section");
+
+    p.build();
+
+    var index = fs.readFileSync(path.join(this.path, 'www', 'index.html'),
+				encoding='utf8');
+    test.ok(index.match('<h1>Test presentation</h1>'));
+    test.ok(index.match('<section><section>☃☃☃</section></section>'));
+    test.ok(index.match('<section><section><h2>Jade section</h2></section></section>'));
 
     test.done();
   }

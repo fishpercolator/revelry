@@ -11,12 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/pedantic-git/revelry.git"
+    "url": "git://github.com/fishpercolator/revelry.git"
   },
-  "author": "Rich Daley",
+  "author": "Fish Percolator",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/pedantic-git/revelry/issues"
+    "url": "https://github.com/fishpercolator/revelry/issues"
   },
   "dependencies": {
     "nomnom": "1.8.x",
@@ -28,7 +28,8 @@
     "jade": "1.11.x",
     "npm": "2.12.x",
     "grunt": "0.4.x",
-    "grunt-subgrunt": "0.4.x"
+    "grunt-subgrunt": "0.4.x",
+    "jstransformer-handlebars": "0.1.x"
   },
   "devDependencies": {
     "grunt-contrib-nodeunit": "0.4.x",
