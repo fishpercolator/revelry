@@ -7,7 +7,8 @@
     "revelry": "revelry.js"
   },
   "scripts": {
-    "test": "./node_modules/.bin/nodeunit test"
+    "postinstall": "uglifyjs -o ./node_modules/reveal.js/js/reveal.min.js --comments '/Copyright/' ./node_modules/reveal.js/js/reveal.js ",
+    "test": "nodeunit test"
   },
   "repository": {
     "type": "git",
@@ -27,12 +28,10 @@
     "tosource": "0.1.x",
     "jade": "1.11.x",
     "npm": "2.12.x",
-    "grunt": "0.4.x",
-    "grunt-subgrunt": "0.4.x",
-    "jstransformer-handlebars": "0.1.x"
+    "jstransformer-handlebars": "0.1.x",
+    "uglify-js": "2.4.x"
   },
   "devDependencies": {
-    "grunt-contrib-nodeunit": "0.4.x",
     "nodeunit": "0.9.x",
     "tmp": "0.0.x"
   }

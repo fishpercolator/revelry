@@ -16,6 +16,10 @@ for the list of planned features and known issues.
 
     $ npm install -g revelry
 
+**Note:** if you are cloning this repo and installing locally, you will need to
+specify the `--unsafe-perm` option to `npm install`. This is because the
+postinstall needs access to the reveal.js dependency.
+
 ## Alternative: Using Docker
 
 If you have Docker installed, you can use Revelry without needing to
