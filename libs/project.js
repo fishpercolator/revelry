@@ -218,7 +218,9 @@ Project.prototype = {
     if (fs.existsSync(jadefn)) {
       // Pass the config() as arguments to the Jade so we can access its
       // variables inside the Jade templates
-      return jade.renderFile(jadefn, this.config());
+      var config = this.config();
+      config['doctype'] = 'html'; // Enable HTML5 features
+      return jade.renderFile(jadefn, config);
     }
     else {
       return this.readFile(name+'.html');
