@@ -1,4 +1,4 @@
-FROM node:0.12.6
+FROM node:0.12
 MAINTAINER Rich Daley <rich@fishpercolator.co.uk>
 
 WORKDIR /app
