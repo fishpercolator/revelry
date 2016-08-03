@@ -71,11 +71,12 @@ module.exports = {
     config.options.controls = false;
     config.plugins.push('highlight');
     config.author = 'The Doctor';
+    config.meta.autometa = 'Working';
     p.writeFileJSON('Revfile.json', config);
 
     // Modify the header & CSS
     p.writeFile(path.join('custom', 'header.html'),
-		'<meta name="x-test" description="test">');
+		'<link rel="stylesheet" href="wibble.css">');
     p.writeFile(path.join('custom', 'custom.css'),
 		'h2 { color: blue; }');
 
@@ -87,7 +88,8 @@ module.exports = {
     test.ok(index.match('controls:false'));
     test.ok(!index.match('controls:true'));
     test.ok(index.match('history:true'));
-    test.ok(index.match('<meta name="x-test" description="test">'));
+    test.ok(index.match('<link rel="stylesheet" href="wibble.css">'));
+    test.ok(index.match('<meta name="autometa" content="Working" />'));
 
     var css = fs.readFileSync(targetFn('css', 'custom.css'), encoding='utf8');
     test.ok(css.match('h2 { color: blue; }'));

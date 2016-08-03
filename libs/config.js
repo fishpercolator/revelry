@@ -32,7 +32,12 @@ function Config (overrides) {
       history: true,
       center: true
     },
-    plugins: ['markdown', 'notes']
+    plugins: ['markdown', 'notes'],
+    meta: {
+      "apple-mobile-web-app-capable": "yes",
+      "apple-mobile-web-app-status-bar-style": "black-translucent",
+      "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"
+    }
   };
   for (var item in defaults) {
     if (item in overrides) {

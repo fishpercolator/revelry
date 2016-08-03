@@ -184,6 +184,10 @@ as meta tags or links to CSS or RSS), you can edit the `header.html`
 file. The contents of this file will be inserted into the
 `<head>` of the presentation.
 
+You can also set any of the `<meta>` tags using the `meta` object in
+`Revfile.json`. If you don't have one because your project was created by an
+older version, run `revelry upgrade` on your project to bring it up to date.
+
 ## Jade support
 
 Revelry also supports templates in [Jade](http://jade-lang.com/) format,
