@@ -29,7 +29,8 @@
     "jade": "^1.11.x",
     "npm": "^3.8.x",
     "jstransformer-handlebars": "^1.0.x",
-    "uglify-js": "^2.6.x"
+    "uglify-js": "^2.6.x",
+    "node-sass": "^3.8.x"
   },
   "devDependencies": {
     "nodeunit": "^0.9.x",

@@ -6,6 +6,7 @@ var npm = require('npm');
 var jade = require('jade');
 var Handlebars = require('handlebars');
 var Config = require('../libs/config.js');
+var sass = require('node-sass');
 
 // Constructor for project
 function Project (theDir, theTarget, quiet) {
@@ -43,7 +44,7 @@ Project.prototype = {
     this.writeFile('.gitignore', "www/\n");
     this.createDir('img');
     this.createDir('custom');
-    this.writeFile('custom/custom.css');
+    this.writeFile('custom/custom.scss', ".reveal {\n\n}\n");
     this.writeFile('custom/header.html');
     this.writeFile('custom/footer.html', this.template('footer.html', true));
 
@@ -98,11 +99,10 @@ Project.prototype = {
     // Compile the index template
     var template = this.template('base.html');
     this.writeTFile('index.html', template(config));
-
+    
     // Copy the image dir
     this.copyDir('img');
-    this.copyFile('custom/custom.css', 'css/custom.css');
-
+    
     // Copy relevant files from Reveal.js
     this.copyFromReveal('css/reveal.css');
     this.copyFromReveal('css/print/pdf.css');
@@ -137,7 +137,11 @@ Project.prototype = {
       	this_.copyFromReveal('package.json');
       }
     });
-
+    
+    // Compile the scss into css
+    var sassRender = sass.renderSync({file: path.join(this.dir, 'custom/custom.scss')});
+    this.writeTFile('css/custom.css', sassRender.css);
+    
     // Does the target have a package.json? OK, we need to npm install
     if (fs.existsSync(path.join(this.target, 'package.json'))) {
       process.chdir(this.target);
@@ -160,6 +164,11 @@ Project.prototype = {
     // Add in the footer file if we need to
     if (!fs.existsSync(path.join(this.dir, 'custom/footer.html'))) {
       this.writeFile('custom/footer.html', this.template('footer.html', true));
+    }
+    // Rename the css file to scss
+    if (fs.existsSync(path.join(this.dir, 'custom/custom.css'))) {
+      fs.renameSync(path.join(this.dir, 'custom/custom.css'),
+                    path.join(this.dir, 'custom/custom.scss'));
     }
   },
   

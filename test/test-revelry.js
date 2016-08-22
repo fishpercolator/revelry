@@ -33,7 +33,7 @@ module.exports = {
     test.ok(fs.existsSync(slidespath));
     var slides = fs.readFileSync(slidespath, encoding='utf8');
     test.ok(slides.match("<h1>{{title}}</h1>"));
-    var custompath = path.join(this.path, 'custom', 'custom.css');
+    var custompath = path.join(this.path, 'custom', 'custom.scss');
     test.ok(fs.existsSync(custompath));
     test.done();
   },
@@ -77,8 +77,8 @@ module.exports = {
     // Modify the header & CSS
     p.writeFile(path.join('custom', 'header.html'),
 		'<link rel="stylesheet" href="wibble.css">');
-    p.writeFile(path.join('custom', 'custom.css'),
-		'h2 { color: blue; }');
+    p.writeFile(path.join('custom', 'custom.scss'),
+		'$var: blue; .reveal { h2 { color: $var; } }');
 
     p.build();
     test.ok(fs.existsSync(targetFn('lib', 'css', 'zenburn.css')));
@@ -91,8 +91,9 @@ module.exports = {
     test.ok(index.match('<link rel="stylesheet" href="wibble.css">'));
     test.ok(index.match('<meta name="autometa" content="Working" />'));
 
+    // Test that Sass is working correctly
     var css = fs.readFileSync(targetFn('css', 'custom.css'), encoding='utf8');
-    test.ok(css.match('h2 { color: blue; }'));
+    test.ok(css.match(".reveal h2 {\n  color: blue; }"));
 
     test.done();
   },

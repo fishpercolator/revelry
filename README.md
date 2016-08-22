@@ -163,17 +163,22 @@ too complicated to automatically guess.
 Revelry currently doesn't support any plugins other than the standard
 ones. Watch out for 3rd-party plugin support in a future release.
 
-### Custom CSS
+### Custom CSS / Sass
 
-Add CSS to the `custom.css` file if you want to override the theme's
+Add CSS to the `custom.scss` file if you want to override the theme's
 default CSS or add classes of your own.
 
-Note that you'll need to cascade all your overrides from the `.reveal`
+The file is preprocessed with [Sass](http://sass-lang.com/), so you can use
+variables, nested selectors, etc. if you wish.
+
+Note that you'll need to put all your overrides inside the `.reveal`
 class, like this:
 
-```css
-.reveal h1 {
-  color: black;
+```scss
+.reveal {
+  h1 {
+    color: black;
+  }
 }
 ```
 
