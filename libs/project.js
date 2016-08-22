@@ -45,6 +45,7 @@ Project.prototype = {
     this.createDir('custom');
     this.writeFile('custom/custom.css');
     this.writeFile('custom/header.html');
+    this.writeFile('custom/footer.html', this.template('footer.html', true));
 
   },
 
@@ -52,6 +53,9 @@ Project.prototype = {
   build: function () {
     // Get the config first as a sanity check
     var config = this.config();
+    
+    // Check the project is up to date
+    this.checkUpToDate();
 
     // Create the target layout
     this.createTDir('');
@@ -60,6 +64,7 @@ Project.prototype = {
     // template
     Handlebars.registerPartial('slides', this.readHtmlOrJadeFile('slides'));
     Handlebars.registerPartial('header', this.readHtmlOrJadeFile('custom/header'));
+    Handlebars.registerPartial('footer', this.readHtmlOrJadeFile('custom/footer'));
 
     // Find all other HTML and Jade files in the current dir (skipping 'slides'
     // since we've already done that)
@@ -83,7 +88,7 @@ Project.prototype = {
     });
     Handlebars.registerHelper('ifplugin', function (name, options) {
       if (this.has_plugin(name)) {
-	return new Handlebars.SafeString(options.fn(this));
+      	return new Handlebars.SafeString(options.fn(this));
       }
     });
 
@@ -129,7 +134,7 @@ Project.prototype = {
       }
       // Otherwise, assume it's an npm thingy and copy the package.json
       else {
-	this_.copyFromReveal('package.json');
+      	this_.copyFromReveal('package.json');
       }
     });
 
@@ -137,10 +142,10 @@ Project.prototype = {
     if (fs.existsSync(path.join(this.target, 'package.json'))) {
       process.chdir(this.target);
       npm.load({}, function (er) {
-	if (er) throw er;
-	npm.commands.install(function (er) {
-	  if (er) throw er;
-	});
+      	if (er) throw er;
+      	npm.commands.install(function (er) {
+      	  if (er) throw er;
+      	});
       });
     }
 
@@ -151,6 +156,18 @@ Project.prototype = {
   upgrade: function () {
     var config = this.config();
     this.writeFileJSON('Revfile.json', config);
+    
+    // Add in the footer file if we need to
+    if (!fs.existsSync(path.join(this.dir, 'custom/footer.html'))) {
+      this.writeFile('custom/footer.html', this.template('footer.html', true));
+    }
+  },
+  
+  // Check the project is up to date - if not, bomb out with an error
+  checkUpToDate: function () {
+    if (!fs.existsSync(path.join(this.dir, 'custom/footer.html'))) {
+      throw "Project out-of-date. Please run 'revelry upgrade'";
+    }
   },
 
   // Get the config from the current Revfile

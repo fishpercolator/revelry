@@ -188,6 +188,14 @@ You can also set any of the `<meta>` tags using the `meta` object in
 `Revfile.json`. If you don't have one because your project was created by an
 older version, run `revelry upgrade` on your project to bring it up to date.
 
+### Custom footer
+
+Added in 2.0.0. This contains the code to initialize Reveal.js and any custom
+JavaScript you want to add to your presentation.
+
+If you have a project that was created before 2.0.0, you'll need to run
+`revelry upgrade` to create this file before you can build.
+
 ## Jade support
 
 Revelry also supports templates in [Jade](http://jade-lang.com/) format,

@@ -57,7 +57,7 @@ module.exports = {
     test.ok(!fs.existsSync(targetFn('plugin', 'zoom')));
     test.ok(!fs.existsSync(targetFn('lib', 'css', 'zenburn.css')));
 
-    // Check the index.html contains our default config
+    // Check the index.html contains our default config, imported from the footer
     var index = fs.readFileSync(targetFn('index.html'), encoding='utf8');
     test.ok(index.match('<h1>Test presentation</h1>'));
     test.ok(index.match('<h2>☃☃☃</h2>'));
