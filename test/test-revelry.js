@@ -97,14 +97,14 @@ module.exports = {
 
     test.done();
   },
-  jade: function (test) {
+  pug: function (test) {
     var p = createProject(this.path, undefined, undefined, true);
 
-    var jade_fn = path.join(this.path, 'slides.jade');
-    test.ok(fs.existsSync(jade_fn));
+    var pug_fn = path.join(this.path, 'slides.pug');
+    test.ok(fs.existsSync(pug_fn));
 
     // Overwrite this file with our own template
-    p.writeFile('slides.jade', "section\n  h3.someclass= title\n  h4(style='color:blue')= description");
+    p.writeFile('slides.pug', "section\n  h3.someclass= title\n  h4(style='color:blue')= description");
     // Put something in the header.html
     p.writeFile(path.join('custom', 'header.html'),
 		'<meta name="x-test" description="test">');
@@ -121,9 +121,9 @@ module.exports = {
   },
   partials: function (test) {
     var p = createProject(this.path);
-    p.writeFile('slides.html', "<section><h1>{{title}}</h1></section><section>{{> moreinfo}}</section><section>{{> jaded}}</section>");
+    p.writeFile('slides.html', "<section><h1>{{title}}</h1></section><section>{{> moreinfo}}</section><section>{{> pugged}}</section>");
     p.writeFile('moreinfo.html', "<section>{{description}}</section>");
-    p.writeFile('jaded.jade', "section\n  h2 Jade section");
+    p.writeFile('pugged.pug', "section\n  h2 Pug section");
 
     p.build();
 
@@ -131,7 +131,7 @@ module.exports = {
 				encoding='utf8');
     test.ok(index.match('<h1>Test presentation</h1>'));
     test.ok(index.match('<section><section>☃☃☃</section></section>'));
-    test.ok(index.match('<section><section><h2>Jade section</h2></section></section>'));
+    test.ok(index.match('<section><section><h2>Pug section</h2></section></section>'));
 
     test.done();
   }
@@ -140,7 +140,7 @@ module.exports = {
 
 // Create a test project in this.path with optional target. Config is
 // a handful of test defaults if not specified
-function createProject(path, target, config, jade) {
+function createProject(path, target, config, pug) {
   if (config == undefined)
     config = new Config({
       title: "Test presentation",
@@ -148,6 +148,6 @@ function createProject(path, target, config, jade) {
       author: "John Smith"
     });
   var p = new Project(path, target, true);
-  p.create(config, jade);
+  p.create(config, pug);
   return p;
 };

@@ -3,7 +3,7 @@ var fs = require('fs-extra');
 var path = require('path');
 var toSource = require('tosource');
 var npm = require('npm');
-var jade = require('jade');
+var pug = require('pug');
 var Handlebars = require('handlebars');
 var Config = require('../libs/config.js');
 var sass = require('node-sass');
@@ -26,14 +26,14 @@ Project.prototype = {
   constructor: Project,
 
   // Create a new project in this.dir with the specified config
-  create: function (config, jade) {
+  create: function (config, pug) {
     this.createDir('', true);
 
     // Create the Revfile and slides.html template using the config
     this.writeFileJSON('Revfile.json', config);
-    if (jade) {
-      var slides = this.template('slides.jade', true);
-      this.writeFile('slides.jade', slides);
+    if (pug) {
+      var slides = this.template('slides.pug', true);
+      this.writeFile('slides.pug', slides);
     }
     else {
       var slides = this.template('slides.html', true);
@@ -54,7 +54,7 @@ Project.prototype = {
   build: function () {
     // Get the config first as a sanity check
     var config = this.config();
-    
+
     // Check the project is up to date
     this.checkUpToDate();
 
@@ -63,19 +63,19 @@ Project.prototype = {
 
     // Register partials that will be interpolated into the base
     // template
-    Handlebars.registerPartial('slides', this.readHtmlOrJadeFile('slides'));
-    Handlebars.registerPartial('header', this.readHtmlOrJadeFile('custom/header'));
-    Handlebars.registerPartial('footer', this.readHtmlOrJadeFile('custom/footer'));
+    Handlebars.registerPartial('slides', this.readHtmlOrPugFile('slides'));
+    Handlebars.registerPartial('header', this.readHtmlOrPugFile('custom/header'));
+    Handlebars.registerPartial('footer', this.readHtmlOrPugFile('custom/footer'));
 
-    // Find all other HTML and Jade files in the current dir (skipping 'slides'
-    // since we've already done that)
+    // Find all other HTML/Handlebars and Pug files in the current dir (skipping
+    // 'slides' since we've already done that)
     var this_ = this;
     fs.readdirSync(this.dir).forEach(function (fn) {
-      var matches = fn.match(/^(\w+)\.(jade|html)$/);
+      var matches = fn.match(/^(\w+)\.(pug|html)$/);
       if (matches) {
         var name = matches[1];
         if (name != 'slides') {
-          Handlebars.registerPartial(name, this_.readHtmlOrJadeFile(name));
+          Handlebars.registerPartial(name, this_.readHtmlOrPugFile(name));
         }
       }
     });
@@ -99,10 +99,10 @@ Project.prototype = {
     // Compile the index template
     var template = this.template('base.html');
     this.writeTFile('index.html', template(config));
-    
+
     // Copy the image dir
     this.copyDir('img');
-    
+
     // Copy relevant files from Reveal.js
     this.copyFromReveal('css/reveal.css');
     this.copyFromReveal('css/print/pdf.css');
@@ -117,6 +117,7 @@ Project.prototype = {
     _.each(['css', 'eot', 'ttf', 'woff'], function (ext) {
       this_.copyFromReveal('lib/font/league-gothic/league-gothic.'+ext);
     });
+    this_.copyFromReveal('lib/font/source-sans-pro/source-sans-pro.css');
     _.each(['italic', 'regular', 'semibold', 'semibolditalic'], function (weight) {
       _.each(['eot','ttf','woff'], function (ext) {
         this_.copyFromReveal('lib/font/source-sans-pro/source-sans-pro-'+weight+'.'+ext);
@@ -137,11 +138,11 @@ Project.prototype = {
       	this_.copyFromReveal('package.json');
       }
     });
-    
+
     // Compile the scss into css
     var sassRender = sass.renderSync({file: path.join(this.dir, 'custom/custom.scss')});
     this.writeTFile('css/custom.css', sassRender.css);
-    
+
     // Does the target have a package.json? OK, we need to npm install
     if (fs.existsSync(path.join(this.target, 'package.json'))) {
       process.chdir(this.target);
@@ -160,7 +161,7 @@ Project.prototype = {
   upgrade: function () {
     var config = this.config();
     this.writeFileJSON('Revfile.json', config);
-    
+
     // Add in the footer file if we need to
     if (!fs.existsSync(path.join(this.dir, 'custom/footer.html'))) {
       this.writeFile('custom/footer.html', this.template('footer.html', true));
@@ -171,7 +172,7 @@ Project.prototype = {
                     path.join(this.dir, 'custom/custom.scss'));
     }
   },
-  
+
   // Check the project is up to date - if not, bomb out with an error
   checkUpToDate: function () {
     if (!fs.existsSync(path.join(this.dir, 'custom/footer.html'))) {
@@ -238,15 +239,20 @@ Project.prototype = {
     return fs.readFileSync(fn, encoding='utf8');
   },
   // Specify a file (without extension) which may be HTML or
-  // Jade. Return the HTML regardless.
-  readHtmlOrJadeFile: function (name) {
+  // Pug. Return the HTML regardless. Supports .jade filenames for backwards
+  // compatibility.
+  readHtmlOrPugFile: function (name) {
     var jadefn = path.join(this.dir,name) + '.jade';
-    if (fs.existsSync(jadefn)) {
-      // Pass the config() as arguments to the Jade so we can access its
-      // variables inside the Jade templates
+    var pugfn  = path.join(this.dir,name) + '.pug';
+    var isJade = fs.existsSync(jadefn);
+    var isPug  = fs.existsSync(pugfn);
+
+    if (isJade || isPug) {
+      // Pass the config() as arguments to the Pug so we can access its
+      // variables inside the Pug templates
       var config = this.config();
       config['doctype'] = 'html'; // Enable HTML5 features
-      return jade.renderFile(jadefn, config);
+      return pug.renderFile(isPug ? pugfn : jadefn, config);
     }
     else {
       return this.readFile(name+'.html');

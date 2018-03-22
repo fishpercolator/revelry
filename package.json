@@ -1,6 +1,6 @@
 {
   "name": "revelry",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Project builder for Reveal.js",
   "main": "revelry.js",
   "bin": {
@@ -20,17 +20,18 @@
     "url": "https://github.com/fishpercolator/revelry/issues"
   },
   "dependencies": {
-    "nomnom": "^1.8.x",
+    "commander": "^2.15.x",
+    "fs-extra": "^5.0.x",
     "handlebars": "^4.0.x",
-    "reveal.js": "^3.2.x",
-    "fs-extra": "^0.26.x",
-    "underscore": "^1.8.x",
-    "tosource": "^0.1.x",
-    "jade": "^1.11.x",
-    "npm": "^3.8.x",
-    "jstransformer-handlebars": "^1.0.x",
-    "uglify-js": "^2.6.x",
-    "node-sass": "^3.8.x"
+    "jstransformer-handlebars": "^1.1.x",
+    "node-sass": "^4.7.x",
+    "npm": "^5.7.x",
+    "pkginfo": "^0.4.1",
+    "pug": "^2.0.3",
+    "reveal.js": "^3.6.x",
+    "tosource": "^1.0.x",
+    "uglify-js": "^3.3.x",
+    "underscore": "^1.8.x"
   },
   "devDependencies": {
     "nodeunit": "^0.9.x",

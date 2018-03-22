@@ -2,62 +2,33 @@
 
 var commands = require('./libs/commands.js');
 
-var parser = require('nomnom').options({
-  version: {
-    flag: true,
-    help: 'Print version',
-    callback: function () {
-      return "v"+JSON.parse(require('fs').readFileSync(__dirname+'/package.json'))['version'];
-    }
-  },
-  quiet: {
-    flag: true,
-    abbr: 'q',
-    help: 'Suppress non-essential messages',
-  }
-});
+var pkginfo = require('pkginfo')(module);
+var program = require('commander');
 
-parser.nocommand()
-  .callback(function () { parser.print(parser.getUsage()); });
+program
+  .version(module.exports.version)
+  .option('-q, --quiet', 'suppress non-essential messages')
 
-parser.command('new')
-  .help('Create a new Revelry project')
-  .options({
-    name: {
-      position: 1,
-      metavar: '<name>',
-      help: 'The name of the new project',
-      required: true
-    },
-    title: {
-      abbr: 't',
-      help: 'The title of the presentation (defaults to name)'
-    },
-    description: {
-      abbr: 'd',
-      help: 'A one-line description of the presentation'
-    },
-    jade: {
-      flag: true,
-      help: 'Use Jade instead of HTML for the main presentation template'
-    }
-  })
-  .callback(commands.new);
+program
+  .command('new <name>')
+  .description('Create a new Revelry project')
+  .option('-t, --title <title>', 'The title of the presentation (defaults to name)')
+  .option('-d, --description <desc>', 'A one-line description of the presentation')
+  .option('--pug', 'Use Pug instead of Handlebars for the main presentation template')
+  .action(commands.new);
 
-parser.command('build')
-  .help('Build the current Revelry project')
-  .options({
-    target: {
-      position: 1,
-      metavar: '<target>',
-      help: 'The target directory to build into',
-      required: false
-    }
-  })
-  .callback(commands.build);
+program
+  .command('build [<target>]')
+  .description('Build the current Revelry project')
+  .action(commands.build);
 
-parser.command('upgrade')
-  .help('Upgrade the Revfile.js to match the current version of Revelry')
-  .callback(commands.upgrade);
+program
+  .command('upgrade')
+  .description('Upgrade Revfile.js to match current version of Revelry')
+  .action(commands.upgrade);
 
-parser.parse();
+program.parse(process.argv);
+
+if (process.argv.length < 3) {
+  program.help();
+}

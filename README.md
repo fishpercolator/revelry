@@ -85,22 +85,22 @@ Or create an alias:
 ## Partials
 
 You can break your presentation into multiple files, which can be a mixture of
-Handlebars and Jade. Then you can include them in each other using each
+Handlebars and Pug. Then you can include them in each other using each
 language's native include syntax. For example:
 
 ```handlebars
 <section>
   <h1>Handlebars example</h1>
 </section>
-{{! Include intro.html or intro.jade}}
+{{! Include intro.html or intro.pug}}
 {{> intro}}
 ```
 
-```jade
+```pug
 section
-  h1 Jade example
-//- Include another Jade file
-include intro.jade
+  h1 Pug example
+//- Include another Pug file
+include intro.pug
 //- Include a Handlebars file
 include:handlebars intro.html
 ```
@@ -201,25 +201,25 @@ JavaScript you want to add to your presentation.
 If you have a project that was created before 2.0.0, you'll need to run
 `revelry upgrade` to create this file before you can build.
 
-## Jade support
+## Pug support
 
-Revelry also supports templates in [Jade](http://jade-lang.com/) format,
+Revelry also supports templates in [Pug](https://pugjs.org/) format,
 which is a more concise language than HTML and lends itself quite well
 to writing presentations.
 
-If you have a `slides.jade` instead of `slides.html`, it will be
-parsed as a Jade file.
+If you have a `slides.pug` instead of `slides.html`, it will be
+parsed as a Pug file.
 
-You can also create a new Jade project outright, e.g.:
+You can also create a new Pug project outright, e.g.:
 
-    $ revelry new myproject --jade
+    $ revelry new myproject --pug
 
-The Revfile context will be passed to Jade as locals, so you can use its
+The Revfile context will be passed to Pug as locals, so you can use its
 values the same way you would in Handlebars.
 
-The earlier example, expressed as Jade, is:
+The earlier example, expressed as Pug, is:
 
-```jade
+```pug
 section
   h1= title
   h2= description
