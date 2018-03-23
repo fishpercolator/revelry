@@ -278,7 +278,8 @@ Project.prototype = {
     var target = path.join(this.target, fn);
     var this_ = this;
     return fs.copySync(src, target, function (file) {
-      this_.log(path.join(this_.target, file));
+      var relfile = file.replace(process.cwd(), '');
+      this_.log(path.join(this_.target, relfile));
       return true;
     });
   }
